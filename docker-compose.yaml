@@ -1,0 +1,18 @@
+services:
+  server:
+    container_name: server
+    build:
+      context: .
+      target: server
+    restart: always
+    ports:
+      - "8080:8080"
+
+  client:
+    container_name: client
+    build:
+      context: .
+      target: client
+    restart: always
+    depends_on:
+      - server
