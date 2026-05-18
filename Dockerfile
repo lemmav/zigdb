@@ -2,7 +2,7 @@
 FROM alpine:3.19 AS builder
 
 RUN apk add --no-cache curl xz && \
-    curl -L https://ziglang.org/download/0.16.0/zig-x86_64-linux-0.16.0.tar.xz | \
+    curl -L https://zig.mirror.mschae23.de/zig/zig-x86_64-linux-0.16.0.tar.xz | \
     tar -xJ -C /usr/local && \
     ln -s /usr/local/zig-x86_64-linux-0.16.0/zig /usr/local/bin/zig
 
@@ -11,7 +11,7 @@ WORKDIR /app
 COPY build.zig build.zig.zon* ./
 COPY src/ src/
 
-RUN zig build -Doptimize=ReleaseFast
+RUN zig build -Doptimize=ReleaseSafe
 
 FROM alpine:3.19 AS server
 
