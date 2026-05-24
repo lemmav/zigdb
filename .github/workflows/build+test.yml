@@ -1,0 +1,26 @@
+name: ZigDB Build and Test
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+jobs:
+  Build-and-Test:
+    runs-on: ubuntu-slim
+    steps:
+      - name: Install system dependencies
+        run: |
+          apk add --no-cache curl xz && \
+          curl -L https://zig.mirror.mschae23.de/zig/zig-x86_64-linux-0.16.0.tar.xz | \
+          tar -xJ -C /usr/local && \
+          ln -s /usr/local/zig-x86_64-linux-0.16.0/zig /usr/local/bin/zig
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Build
+        run: zig build -Doptimize=ReleaseSafe
+      - name: Unit tests
+        run: zig build test
+      - name: SQL Test
+        run: ./src/test_runner.py
+
